@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@jukben/emoji-search": "^3.0.0",
+    "@webscopeio/react-textarea-autocomplete": "^4.9.2"
+  }
+}

@@ -1,0 +1,1236 @@
+a classic [mountain] {depicted by a polygon element with points "50,150 100,50 150,150", fill color #4d4d4d} [cabin] {represented by a rectangle element with x="80", y="100", width="40", height="30", fill color "brown"} with a [stone chimney] {depicted by a rectangle element with x="110", y="70", width="10", height="20", fill color "gray"} and [red wooden doors] {represented by a rectangle with x="95", y="110", width="10", height="20", fill color "red"} on a [forested hill] {implied context, not directly visualized but suggested by mountain and cabin layout} , under a [night sky] {background color #1E1E1E} with thick, fluffy [snowflakes] {two circles, each with r="1.5", fill color "white", animated on paths defined by "M30,0 Q60,100 30,200" for snowflake1 and "M170,0 Q140,100 170,200" for snowflake2, animation durations 5000ms and 7000ms respectively} slowly [falling] {animation of translateY from 0 to 100vh over keyframes defined in CSS} .
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        background: #1E1E1E;
+      }
+      svg {
+        width: 100vmin;
+        height: 100vmin;
+      }
+      @keyframes fall {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(100vh); }
+      }
+    </style>
+  </head>
+  <body>
+    <svg viewBox="0 0 200 200">
+      <!-- Mountain -->
+      <polygon points="50,150 100,50 150,150" fill="#4d4d4d" />
+      <!-- Cabin -->
+      <rect x="80" y="100" width="40" height="30" fill="brown" />
+      <!-- Roof -->
+      <polygon points="70,100 100,80 130,100" fill="#8B4513" />
+      <!-- Chimney -->
+      <rect x="110" y="70" width="10" height="20" fill="gray" />
+      <!-- Door -->
+      <rect x="95" y="110" width="10" height="20" fill="red" />
+      <!-- Snowflakes Path 1 -->
+      <path id="snowPath1" d="M30,0 Q60,100 30,200" />
+      <!-- Snowflakes Path 2 -->
+      <path id="snowPath2" d="M170,0 Q140,100 170,200" />
+      <!-- Snowflakes -->
+      <circle id="snowflake1" cx="0" cy="0" r="1.5" fill="white" />
+      <circle id="snowflake2" cx="0" cy="0" r="1.5" fill="white" />
+    </svg>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script>
+      anime({
+        targets: '#snowflake1',
+        translateX: anime.path('#snowPath1')('x'),
+        translateY: anime.path('#snowPath1')('y'),
+        easing: 'linear',
+        duration: 5000,
+        loop: true,
+      });
+      anime({
+        targets: '#snowflake2',
+        translateX: anime.path('#snowPath2')('x'),
+        translateY: anime.path('#snowPath2')('y'),
+        easing: 'linear',
+        duration: 7000,
+        loop: true,
+      });
+    </script>
+  </body>
+</html>
+
+%%%
+An [oak tree] {SVG element with trunk and expansive, symmetric branches} has a [broad trunk] {rectangle at x="90" y="100", width="20", height="60", fill="#8B4513"} and many [expansive branches] {four paths representing the branches, two curving upward and two curving downward, styled with stroke="#8B4513", stroke-width="5", and fill="transparent"} . It features [denser leaves] that [change] {color transition from light green (#9ACD32) to dark green (#006400) using easing function easeInOutQuad over 2000ms} from [light green] {initial color of circles} to [dark green] {color at the end of the animation} . This tree is set under a [sunny sky] {linear-gradient background representing the sky, transitioning from light blue at the top to green at the bottom, with a glowing sun icon positioned in the upper right} . The scene is animated so that these leaves [grow gradually] {animation effects causing circles to increase in size and change color} in a [lush forest] {represented by the darker green portion of the gradient in the background, suggesting thick foliage} .
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background: linear-gradient(#87CEFA, #228B22);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #sun {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #FFD700;
+            box-shadow: 0 0 50px #FFD700;
+        }
+    </style>
+</head>
+<body>
+    <div id="sun"></div>
+    <svg width="200" height="200">
+        <rect x="90" y="100" width="20" height="60" fill="#8B4513"></rect>
+        <path d="M90 100 C70 80, 50 70, 30 80" stroke="#8B4513" stroke-width="5" fill="transparent"></path>
+        <path d="M110 100 C130 80, 150 70, 170 80" stroke="#8B4513" stroke-width="5" fill="transparent"></path>
+        <!-- Additional branches for "many expansive branches" -->
+        <path d="M90 100 C70 120, 50 130, 30 120" stroke="#8B4513" stroke-width="5" fill="transparent"></path>
+        <path d="M110 100 C130 120, 150 130, 170 120" stroke="#8B4513" stroke-width="5" fill="transparent"></path>
+        <circle cx="30" cy="80" r="5" fill="#9ACD32"></circle>
+        <circle cx="170" cy="80" r="5" fill="#9ACD32"></circle>
+        <circle cx="30" cy="120" r="5" fill="#9ACD32"></circle>
+        <circle cx="170" cy="120" r="5" fill="#9ACD32"></circle>
+        <!-- Additional leaves for "lots of denser leaves" -->
+        <circle cx="50" cy="70" r="5" fill="#9ACD32"></circle>
+        <circle cx="150" cy="70" r="5" fill="#9ACD32"></circle>
+    </svg>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script>
+        anime({
+            targets: 'circle',
+            r: 10,
+            fill: {
+                value: ['#9ACD32', '#006400'],
+                easing: 'easeInOutQuad',
+                duration: 2000
+            },
+            easing: 'easeInOutQuad',
+            duration: 2000,
+            direction: 'alternate',
+            loop: true
+        });
+    </script>
+</body>
+</html>
+%%%
+A [cottage] {rect element with x: 50, y: 80, width: 100, height: 60, filled in white} perched on a [green mountain] {path element shaped to create a mountainous outline with coordinates "M0 140 L50 100 L100 140 L150 90 L200 140 L200 200 L0 200 Z", filled in #006400} under a [sky-blue background] {rect element covering the entire SVG's upper area with width="100%" and height="200", fill="#87CEEB"} boasts a [thatched roof] {polygon element with points "45,80 155,80 100,50", filled in #8b4513, resembling saddle brown} and sturdy [walls] {defined by the fill color of the rectangle forming the main body of the cottage} . A [chimney] {rect element with x: 130, y: 55, width: 15, height: 25, filled in #b22222, similar to firebrick red} protrudes from the roof, emitting [animated smoke] {three circle elements with ids "smoke1", "smoke2", and "smoke3", animated to ascend while varying in radius and opacity, simulating dispersing smoke into the air} .
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Cottage</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #87CEEB;
+        }
+        svg {
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <svg width="200" height="200">
+        <!-- Sky -->
+        <rect width="100%" height="200" fill="#87CEEB"></rect>
+        <!-- Green mountain -->
+        <path d="M0 140 L50 100 L100 140 L150 90 L200 140 L200 200 L0 200 Z" fill="#006400"></path>
+        <!-- Cottage body -->
+        <rect x="50" y="80" width="100" height="60" fill="white"></rect>
+        <!-- Thatched roof -->
+        <polygon points="45,80 155,80 100,50" fill="#8b4513"></polygon>
+        <!-- Chimney -->
+        <rect x="130" y="55" width="15" height="25" fill="#b22222"></rect>
+        <!-- Smoke animation -->
+        <circle id="smoke1" cx="138" cy="50" r="1" fill="grey"></circle>
+        <circle id="smoke2" cx="138" cy="50" r="1" fill="grey"></circle>
+        <circle id="smoke3" cx="138" cy="50" r="1" fill="grey"></circle>
+    </svg>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+    <script>
+        function animateSmoke() {
+            var timeline = anime.timeline({
+                loop: true,
+                direction: 'alternate'
+            });
+
+            timeline
+                .add({
+                    targets: '#smoke1',
+                    r: [{ value: 10 }, { value: 1 }],
+                    opacity: [{ value: 0.7, duration: 100 }, { value: 0, duration: 1000 }],
+                    translateY: -40,
+                    easing: 'easeOutCirc',
+                    duration: 2000
+                })
+                .add({
+                    targets: '#smoke2',
+                    r: [{ value: 12 }, { value: 1 }],
+                    opacity: [{ value: 0.7, duration: 100 }, { value: 0, duration: 1000 }],
+                    translateY: -60,
+                    translateX: 15,
+                    easing: 'easeOutCirc',
+                    duration: 2200,
+                    offset: '-=1800'
+                })
+                .add({
+                    targets: '#smoke3',
+                    r: [{ value: 8 }, { value: 1 }],
+                    opacity: [{ value: 0.7, duration: 100 }, { value: 0, duration: 1000 }],
+                    translateY: -50,
+                    translateX: -10,
+                    easing: 'easeInQuad',
+                    duration: 1800,
+                    offset: '-=1800'
+                });
+        }
+
+        animateSmoke();
+    </script>
+</body>
+</html>
+
+A [white rabbit] {composed of a round body and head, with additional details such as long ears shaped using quadratic bezier curves and pink eyes, initially not displayed but shown once the animation starts} is magically [appearing] {the rabbit, initially scaled down and hidden, dynamically grows and becomes visible through a CSS-based transformation triggered by JavaScript} from a [magician’s hat] {black rect element with id 'hat', positioned centrally and sized appropriately, topped with a brim for added realism} against a [skyblue background] {covering the entire viewport consistently} .
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background-color: skyblue; /* Background color remains skyblue as specified */
+    }
+    svg {
+      width: 100vmin;
+      height: 100vmin;
+    }
+    #rabbit {
+      fill: white; /* Rabbit is white */
+      stroke: black; /* Outline color change to black for contrast */
+      stroke-width: 2;
+    }
+    #hat {
+      fill: black; /* Hat color remains black */
+      stroke: none; /* No stroke needed on the hat */
+    }
+  </style>
+</head>
+<body>
+  <svg viewBox="0 0 200 200">
+    <!-- The magician's hat with added brim -->
+    <rect id="hat" x="45" y="100" width="110" height="100"></rect>
+    <rect x="30" y="95" width="140" height="10" fill="black"></rect> <!-- Hat's brim -->
+
+    <!-- Updated rabbit with details -->
+    <g id="rabbit" style="display: none;">
+      <!-- Body and head of the rabbit -->
+      <circle cx="100" cy="85" r="30"></circle>
+      <circle cx="100" cy="55" r="20"></circle>
+      <!-- Ears of the rabbit -->
+      <path d="M100,25 Q95,5 90,25"></path>
+      <path d="M100,25 Q105,5 110,25"></path>
+      <!-- Adding pink eyes to the rabbit -->
+      <circle cx="92" cy="50" r="3" fill="pink"></circle>
+      <circle cx="108" cy="50" r="3" fill="pink"></circle>
+    </g>
+  </svg>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script>
+    anime({
+      targets: '#rabbit',
+      translateY: [-50, 0],
+      scale: [
+        {value: 0.1, duration: 500},
+        {value: 1, duration: 500}
+      ],
+      changeBegin: function() {
+        document.getElementById('rabbit').style.display = "block";
+      },
+      easing: 'easeInOutQuad',
+      direction: 'alternate',
+      loop: true
+    });
+  </script>
+</body>
+</html>
+
+A [gray rabbit] {composed of elements #rabbitBody and #rabbitHead for the body and head, #rabbitEarLeft and #rabbitEarRight for elongated ears, all filled with gray color} with [expressive eyes] {styled using #rabbitEye1 and #rabbitEye2, each a circle with a radius of 3 and now colored pink} is [emerging] {animated along a path defined by #rabbitPath with coordinates M100,200 V50 Q110,0 100,50, utilizing 'easeInOutQuad' easing, over a duration of 5000ms, alternating direction, looping} from a short [velvet blue top hat] {constructed from #hatBox, #hatTop, and #hatBrim, with main components colored #0000fe} with a [silver band] {represented by #hatBrim, illustrated as a rect element at position x=60, y=70, width=80, height=10, colored #8b9dc3} , with the background of a stage with deep red curtains.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    svg {
+      width: 100vmin;
+      height: 100vmin;
+    }
+  </style>
+</head>
+<body>
+  <svg viewBox="0 0 200 200">
+  
+    <!-- path for the rabbit to appear from the hat -->
+    <path id="rabbitPath" d="M100,200 V50 Q110,0 100,50" fill="transparent" stroke="transparent" />
+
+    <circle id="rabbitBody" cx="0" cy="10" r="20" fill="gray" />
+    <circle id="rabbitHead" cx="0" cy="-10" r="15" fill="gray" />
+    <ellipse id="rabbitEarLeft" cx="-5" cy="-10" rx="3" ry="30" fill="gray" />
+    <ellipse id="rabbitEarRight" cx="5" cy="-10" rx="3" ry="30" fill="gray" />
+    <circle id="rabbitEye1" cx="-4" cy="-10" r="3" fill="pink" />
+    <circle id="rabbitEye2" cx="4" cy="-10" r="3" fill="pink" />
+    <ellipse id="hatTop" cx="100" cy="70" rx="40" ry="20" fill="#0000fe" />
+    <rect id="hatBrim" x="60" y="70" width="80" height="10" fill="#8b9dc3" />
+    <rect id="hatBox" x="80" y="80" width="40" height="120" fill="#0000fe" />
+
+  </svg>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>  
+  
+<script>
+    anime({
+      targets: ['#rabbitBody', '#rabbitHead', '#rabbitTail', '#rabbitEye1', '#rabbitEye2', '#rabbitEarLeft', '#rabbitEarRight'],
+      translateX: anime.path('#rabbitPath')('x'),
+      translateY: anime.path('#rabbitPath')('y'),
+      easing: 'easeInOutQuad',
+      duration: 5000,
+      direction: 'alternate',
+      loop: true
+    });
+</script>
+
+</body>
+</html>
+
+A [white rabbit] {composed of a round body and head, with additional details such as ears shaped using quadratic bezier curves and eyes highlighted in pink, initially not displayed but shown once the animation starts} is magically [appearing] {the rabbit, initially scaled down and hidden, dynamically grows and becomes visible through a CSS-based transformation triggered by JavaScript} from a [magician’s hat] {a black rectangular element with id 'hat', positioned centrally and sized appropriately, enhanced with a brim for added realism} against a [skyblue background] {covering the entire viewport consistently} with [opening red curtains] {rectangular elements sliding sideways to reveal the scene, animated at the start of the session} .
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background-color: skyblue;
+    }
+    svg {
+      width: 100vmin;
+      height: 100vmin;
+    }
+    #rabbit {
+      fill: white;
+      stroke: black;
+      stroke-width: 2;
+    }
+    #hat {
+      fill: black;
+    }
+    #curtain-left, #curtain-right {
+      fill: red;
+      stroke: none;
+    }
+  </style>
+</head>
+<body>
+  <svg viewBox="0 0 200 200">
+    <!-- Magician's hat with added brim -->
+    <rect id="hat" x="45" y="100" width="110" height="100"></rect>
+    <rect x="30" y="95" width="140" height="10" fill="black"></rect>
+
+    <!-- Rabbit with details -->
+    <g id="rabbit" style="display: none;">
+      <circle cx="100" cy="85" r="30"></circle>
+      <circle cx="100" cy="55" r="20"></circle>
+      <path d="M100,25 Q95,5 90,25"></path>
+      <path d="M100,25 Q105,5 110,25"></path>
+      <circle cx="92" cy="50" r="3" fill="pink"></circle>
+      <circle cx="108" cy="50" r="3" fill="pink"></rightarrow>
+    </g>
+
+    <!-- Added curtain elements -->
+    <rect id="curtain-left" x="-100" y="0" width="150" height="200"></rect>
+    <rect id="curtain-right" x="150" y="0" width="150" height="200"></rect>
+  </svg>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script>
+    anime({
+      targets: '#rabbit',
+      translateY: [-50, 0],
+      scale: [
+        {value: 0.1, duration: 500},
+        {value: 1, duration: 500}
+      ],
+      changeBegin: function() {
+        document.getElementById('rabbit').style.display = "block";
+      },
+      easing: 'easeInOutQuad',
+      direction: 'alternate',
+      loop: true
+    });
+
+    anime({
+      targets: ['#curtain-left', '#curtain-right'],
+      translateX: function(el) {
+        return el.id === 'curtain-left' ? [0, -150] : [0, 150];
+      },
+      easing: 'easeInOutQuad',
+      duration: 3000,
+      loop: false
+    });
+  </script>
+</body>
+</html>
+
+[Trees] {three tree trunk elements, #tree1, #tree2, and #tree3, represented by SVG paths} and [buildings] [growing] {trees' growth animated by trunks growing tall and branches sprouting and expanding, buildings' growth animated by increasing height and decreasing y position} [taller] {trees grow to different heights (40px, 50px, and 60px), buildings grow to 60px and 80px respectively} together on a [hill] {represented by a curved SVG path with green fill} against a [sky] {represented by the light blue background color #87CEEB} backdrop. The [animation] {created using the Anime.js library, with easing functions and delays for smooth, sequential growth, including a loop for buildings and three-stage growth for trees} creates a dynamic scene of nature and urban development.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Growing Trees and Buildings</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background-color: #87CEEB;
+    }
+    svg {
+      width: 100vmin;
+      height: 100vmin;
+    }
+  </style>
+</head>
+<body>
+  <svg viewBox="0 0 200 200">
+    <!-- Hill -->
+    <path id="hill" d="M0,200 Q100,100 200,200" fill="#4CAF50"/>
+    
+    <!-- Trees -->
+    <path id="tree1" d="M50,200 L50,200" fill="none" stroke="#8B4513" stroke-width="2"/>
+    <path id="tree2" d="M80,200 L80,200" fill="none" stroke="#8B4513" stroke-width="2"/>
+    <path id="tree3" d="M110,200 L110,200" fill="none" stroke="#8B4513" stroke-width="2"/>
+    
+    <!-- Buildings -->
+    <rect id="building1" x="130" y="200" width="20" height="0" fill="#808080"/>
+    <rect id="building2" x="160" y="200" width="20" height="0" fill="#808080"/>
+  </svg>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script>
+    function createTreePath(x, height) {
+      return `M${x},200 L${x},${200-height}`;
+    }
+
+    function createBranchPath(x, height, branchHeight, size) {
+      return `M${x-size},${200-branchHeight} L${x},${200-branchHeight-size*3} L${x+size},${200-branchHeight}`;
+    }
+
+    anime({
+      targets: ['#tree1', '#tree2', '#tree3'],
+      d: function(el, i) {
+        return createTreePath(50 + i * 30, 40 + i * 10);
+      },
+      easing: 'easeInOutSine',
+      duration: 2000,
+      delay: function(el, i) { return i * 250 },
+      complete: function(anim) {
+        anime({
+          targets: ['#tree1', '#tree2', '#tree3'],
+          d: function(el, i) {
+            const height = 40 + i * 10;
+            return createTreePath(50 + i * 30, height) + ' ' +
+                   createBranchPath(50 + i * 30, height, height * 0.7, 0) + ' ' +
+                   createBranchPath(50 + i * 30, height, height * 0.4, 0) + ' ' +
+                   createBranchPath(50 + i * 30, height, height * 0.1, 0);
+          },
+          easing: 'easeOutQuad',
+          duration: 1000,
+          delay: function(el, i) { return i * 250 },
+          complete: function(anim) {
+            anime({
+              targets: ['#tree1', '#tree2', '#tree3'],
+              d: function(el, i) {
+                const height = 40 + i * 10;
+                return createTreePath(50 + i * 30, height) + ' ' +
+                       createBranchPath(50 + i * 30, height, height * 0.7, 5) + ' ' +
+                       createBranchPath(50 + i * 30, height, height * 0.4, 5) + ' ' +
+                       createBranchPath(50 + i * 30, height, height * 0.1, 5);
+              },
+              easing: 'easeOutElastic(1, .8)',
+              duration: 1500,
+              delay: function(el, i) { return i * 250 }
+            });
+          }
+        });
+      }
+    });
+
+    anime({
+      targets: ['#building1', '#building2'],
+      height: function(el, i) { return [0, 60 + i * 20]; },
+      y: function(el, i) { return [200, 140 - i * 20]; },
+      easing: 'easeInOutQuad',
+      duration: 2000,
+      delay: function(el, i) { return 1000 + i * 250 },
+      loop: true
+    });
+  </script>
+</body>
+</html>
+
+[Flower] {SVG element composed of stem, leaves, center, and petals} with [colorful] {red, pink, purple, and orange} [petals] {4 petal paths with curved shapes, initially transparent and gradually filled with semi-transparent colors} and [green] {stroke color set to green} [leaves] {2 leaf paths with curved shapes, initially transparent and gradually filled with semi-transparent green} [appearing] {animated using anime.js library with staggered delays} and [growing] {stem extends from bottom, leaves and petals appear with stroke animations, center circle grows from 0 to 10px radius} [big] {final size determined by SVG viewBox of 200x200} from a [stem] {line element with green stroke, animates from bottom to top} .
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Growing Flower Animation</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background-color: #87CEEB;
+    }
+    svg {
+      width: 100vmin;
+      height: 100vmin;
+    }
+  </style>
+</head>
+<body>
+  <svg viewBox="0 0 200 200">
+    <line id="stem" x1="100" y1="200" x2="100" y2="200" stroke="green" stroke-width="4"/>
+    <path id="leaf1" d="M100,150 Q80,130 100,110" fill="transparent" stroke="green" stroke-width="2"/>
+    <path id="leaf2" d="M100,130 Q120,110 100,90" fill="transparent" stroke="green" stroke-width="2"/>
+    <circle id="center" cx="100" cy="70" r="0" fill="yellow"/>
+    <path id="petal1" d="M100,70 Q85,55 100,40" fill="transparent" stroke="red" stroke-width="2"/>
+    <path id="petal2" d="M100,70 Q115,55 100,40" fill="transparent" stroke="pink" stroke-width="2"/>
+    <path id="petal3" d="M100,70 Q85,85 100,100" fill="transparent" stroke="purple" stroke-width="2"/>
+    <path id="petal4" d="M100,70 Q115,85 100,100" fill="transparent" stroke="orange" stroke-width="2"/>
+  </svg>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script>
+    anime({
+      targets: '#stem',
+      y2: 100,
+      duration: 2000,
+      easing: 'easeOutQuad'
+    });
+
+    anime({
+      targets: ['#leaf1', '#leaf2'],
+      strokeDashoffset: [anime.setDashoffset, 0],
+      easing: 'easeInOutSine',
+      duration: 1500,
+      delay: 1000,
+      fill: 'rgba(0, 128, 0, 0.7)'
+    });
+
+    anime({
+      targets: '#center',
+      r: 10,
+      duration: 1000,
+      delay: 2000,
+      easing: 'easeOutElastic(1, .8)'
+    });
+
+    anime({
+      targets: ['#petal1', '#petal2', '#petal3', '#petal4'],
+      strokeDashoffset: [anime.setDashoffset, 0],
+      easing: 'easeInOutQuad',
+      duration: 1500,
+      delay: anime.stagger(200, {start: 2500}),
+      fill: function(el, i) {
+        return ['rgba(255, 0, 0, 0.7)', 'rgba(255, 192, 203, 0.7)', 'rgba(128, 0, 128, 0.7)', 'rgba(255, 165, 0, 0.7)'][i];
+      }
+    });
+  </script>
+</body>
+</html>
+
+[A white rabbit] {rabbit-body class, ellipse shape, fill color #ffffff, initially flat with ry: 0, animates to ry: 40 and translateY: -40} with [long ears] {rabbit-ear class, two path elements, fill color #ffffff, animate translateY: -100 and scaleY: 1.2} and a [pink nose] {rabbit-nose class, ellipse shape, fill color #ffb6c1, rx: 10, ry: 5} [popping out] {animation timeline using anime.js, duration 2000ms, easing 'easeOutElastic(1, .8)'} of a [black top hat] {hat-body class, path element, fill color #000000, animates from 'M100 300 Q200 50 300 300 Z' to 'M80 300 Q200 100 320 300 Z'} , with the hat's [brim] {hat-brim class, ellipse shape, fill color #000000, animates ry from 20 to 30 and scaleX to 0.9} and [body] {hat-body class, same as black top hat} slightly [distorting] {animation of hat-body and hat-brim} as the rabbit emerges.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rabbit in a Hat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        #animation-container {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hat-body {
+            fill: #000000;
+        }
+        .hat-brim {
+            fill: #000000;
+        }
+        .rabbit-body {
+            fill: #ffffff;
+        }
+        .rabbit-ear {
+            fill: #ffffff;
+        }
+        .rabbit-nose {
+            fill: #ffb6c1;
+        }
+        .rabbit-eye {
+            fill: #000000;
+        }
+    </style>
+</head>
+<body>
+    <div id="animation-container">
+        <svg width="100%" height="100%" viewBox="0 0 400 400">
+            <ellipse class="hat-brim" cx="200" cy="300" rx="150" ry="20" />
+            <path class="hat-body" d="M100 300 Q200 50 300 300 Z" />
+            <path class="rabbit-ear" d="M170 280 Q160 200 180 180 Q200 200 190 280 Z" />
+            <path class="rabbit-ear" d="M230 280 Q220 200 240 180 Q260 200 250 280 Z" />
+            <ellipse class="rabbit-body" cx="200" cy="300" rx="50" ry="0" />
+            <circle class="rabbit-eye" cx="185" cy="290" r="5" />
+            <circle class="rabbit-eye" cx="215" cy="290" r="5" />
+            <ellipse class="rabbit-nose" cx="200" cy="300" rx="10" ry="5" />
+        </svg>
+    </div>
+
+    <script>
+        const timeline = anime.timeline({
+            easing: 'easeOutElastic(1, .8)',
+            duration: 2000
+        });
+
+        timeline
+            .add({
+                targets: '.rabbit-body',
+                ry: 40,
+                translateY: -40
+            })
+            .add({
+                targets: '.rabbit-ear',
+                translateY: -100,
+                scaleY: 1.2
+            }, '-=1800')
+            .add({
+                targets: '.rabbit-eye, .rabbit-nose',
+                translateY: -40
+            }, '-=1800')
+            .add({
+                targets: '.hat-body',
+                d: 'M80 300 Q200 100 320 300 Z'
+            }, '-=2000')
+            .add({
+                targets: '.hat-brim',
+                ry: 30,
+                scaleX: 0.9
+            }, '-=2000');
+    </script>
+</body>
+</html>
+
+[A single bird]{SVG path element with id "bird", class "bird-body" for body, "bird-wing" for wings, and "bird-beak" for beak} with a [sleek, aerodynamic body]{path with curved shape using Q and T commands} and a [sharp beak]{triangular path element} [spreading its wings]{two separate wing paths with class "left-wing" and "right-wing"} to [swoop and turn]{anime.js animation with flightPath defined by 'M200,200 C100,100 300,300 100,200 S300,100 200,200', duration 6000ms, easing 'linear', loop true} through the [vast, open sky]{SVG rect element with class "sky", fill color #87CEEB} dotted with [puffy white clouds]{two SVG path elements with class "cloud", fill color #FFFFFF, animated to move horizontally} and a [radiant, yellow sun]{SVG circle element with class "sun", cx 350, cy 50, r 30, fill color #FFD700, animated opacity and scale}.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bird Soaring Through Sky</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #87CEEB;
+        }
+        #animation-container {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        .sky {
+            fill: #87CEEB;
+        }
+        .sun {
+            fill: #FFD700;
+        }
+        .cloud {
+            fill: #FFFFFF;
+        }
+        .bird-body {
+            fill: #4A4A4A;
+        }
+        .bird-wing {
+            fill: #5A5A5A;
+        }
+        .bird-beak {
+            fill: #FFA500;
+        }
+    </style>
+</head>
+<body>
+    <div id="animation-container">
+        <svg width="100%" height="100%" viewBox="0 0 400 400">
+            <rect class="sky" width="400" height="400" />
+            <circle class="sun" cx="350" cy="50" r="30" />
+            <path class="cloud" d="M80 80 Q100 60 120 80 T160 80 T200 80 Q220 60 200 80 T160 100 T120 100 Q100 120 80 100 Z" />
+            <path class="cloud" d="M280 120 Q300 100 320 120 T360 120 T400 120 Q420 100 400 120 T360 140 T320 140 Q300 160 280 140 Z" />
+            <path id="flight-path" d="M200,200 C100,100 300,300 100,200 S300,100 200,200" fill="none" stroke="transparent"/>
+            <g id="bird" transform="translate(200, 200)">
+                <path class="bird-body" d="M0 0 Q20 -10 40 0 T80 0 Q60 10 40 20 T0 20 Q-10 10 0 0 Z" />
+                <path class="bird-wing left-wing" d="M20 0 Q0 -20 -40 -10 Q0 0 20 0" />
+                <path class="bird-wing right-wing" d="M60 0 Q80 -20 120 -10 Q80 0 60 0" />
+                <path class="bird-beak" d="M80 0 L90 -5 L90 5 Z" />
+            </g>
+        </svg>
+    </div>
+
+    <script>
+        const bird = document.getElementById('bird');
+        const leftWing = document.querySelector('.left-wing');
+        const rightWing = document.querySelector('.right-wing');
+
+        const flightPath = anime.path('#flight-path');
+
+        anime({
+            targets: bird,
+            translateX: flightPath('x'),
+            translateY: flightPath('y'),
+            rotate: flightPath('angle'),
+            duration: 6000,
+            easing: 'linear',
+            loop: true
+        });
+
+        anime({
+            targets: [leftWing, rightWing],
+            scaleY: [1, 0.5, 1],
+            duration: 500,
+            easing: 'easeInOutSine',
+            loop: true
+        });
+
+        anime({
+            targets: '.sun',
+            opacity: [0.7, 1],
+            scale: [1, 1.1],
+            duration: 2000,
+            easing: 'easeInOutQuad',
+            loop: true
+        });
+
+        anime({
+            targets: '.cloud',
+            translateX: '-100%',
+            duration: 20000,
+            easing: 'linear',
+            loop: true
+        });
+    </script>
+</body>
+</html>
+
+[Majestic eagle] {SVG paths for body, head, beak, eyes, and wings; colored with #704214 for body, #FFFFFF for head, #FFD700 for beak, #000000 for eyes, and #5D3A1A for wings} with a [sharp hooked beak] {SVG path with class 'eagle-beak', triangular shape} and [powerful wings] {two SVG paths with class 'eagle-wing', animated to rotate between -1 and 1 degrees} [folded at its sides] {positioned on either side of the body} [perched] {static position} atop a [tall, leafy tree] {SVG paths for trunk (class 'tree-trunk', #8B4513) and leaves (class 'tree-leaves', #228B22), leaves animated to scale between 1 and 1.02} against a [serene sky] {SVG rect with class 'sky', colored #87CEEB} with [scattered clouds] {two SVG paths with class 'cloud', colored #FFFFFF, animated to move horizontally from 0% to 100%} drifting in the background.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Majestic Eagle on a Tree</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #87CEEB;
+        }
+        #animation-container {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        .sky { fill: #87CEEB; }
+        .cloud { fill: #FFFFFF; }
+        .tree-trunk { fill: #8B4513; }
+        .tree-leaves { fill: #228B22; }
+        .eagle-body { fill: #704214; }
+        .eagle-head { fill: #FFFFFF; }
+        .eagle-beak { fill: #FFD700; }
+        .eagle-eye { fill: #000000; }
+        .eagle-wing { fill: #5D3A1A; }
+    </style>
+</head>
+<body>
+    <div id="animation-container">
+        <svg width="100%" height="100%" viewBox="0 0 400 400">
+            <rect class="sky" width="400" height="400" />
+            <path class="cloud" d="M50 80 Q70 50 100 70 Q130 40 160 70 Q180 60 190 80 Q160 90 130 85 Q100 95 50 80 Z" />
+            <path class="cloud" d="M250 50 Q270 20 300 40 Q330 10 360 40 Q380 30 390 50 Q360 60 330 55 Q300 65 250 50 Z" />
+            <path class="tree-trunk" d="M180 400 L200 150 L220 400 Z" />
+            <path class="tree-leaves" d="M200 150 Q130 200 100 300 Q200 250 300 300 Q270 200 200 150 Z" />
+            <path class="eagle-body" d="M180 160 Q200 140 220 160 L220 200 Q200 210 180 200 Z" />
+            <path class="eagle-head" d="M190 150 Q200 140 210 150 L210 165 Q200 170 190 165 Z" />
+            <path class="eagle-beak" d="M195 155 L205 155 L200 165 Z" />
+            <circle class="eagle-eye" cx="197" cy="153" r="2" />
+            <circle class="eagle-eye" cx="203" cy="153" r="2" />
+            <path class="eagle-wing" d="M180 170 Q160 180 170 200 Q180 190 180 170 Z" />
+            <path class="eagle-wing" d="M220 170 Q240 180 230 200 Q220 190 220 170 Z" />
+        </svg>
+    </div>
+
+    <script>
+        anime({
+            targets: '.cloud',
+            translateX: ['0%', '100%'],
+            duration: 20000,
+            easing: 'linear',
+            loop: true
+        });
+
+        anime({
+            targets: '.tree-leaves',
+            scale: [1, 1.02, 1],
+            duration: 3000,
+            easing: 'easeInOutQuad',
+            loop: true
+        });
+
+        anime({
+            targets: '.eagle-wing',
+            rotate: [-1, 1],
+            duration: 2000,
+            easing: 'easeInOutQuad',
+            loop: true
+        });
+    </script>
+</body>
+</html>
+
+A [sailboat] {SVG path elements for hull, mast, and sail; boat-hull class with #8B4513 fill, boat-mast class with #8B4513 fill, boat-sail class with gradient fill} with a [wooden hull] {boat-hull class with #8B4513 fill} , a [tall mast] {boat-mast class with #8B4513 fill} , and a [colorful billowing sail] {boat-sail class with gradient fill, animating between two d attribute values} [gliding] {translateX and translateY animation, moving 100px horizontally and -10px vertically over 6000ms} across the [rolling blue waves] {two wave path elements with #4169E1 fill, animating up and down 5px over 2000ms} with a [bright sun] {circle element with sun class, #FFD700 fill, 30px radius, animating up and down 5px over 3000ms} and [fluffy white clouds] {two cloud path elements with #FFFFFF fill, animating horizontally 20px over 4000ms} in the background.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sailboat Animation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #87CEEB;
+        }
+        #animation-container {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        .sun {
+            fill: #FFD700;
+        }
+        .cloud {
+            fill: #FFFFFF;
+        }
+        .wave {
+            fill: #4169E1;
+        }
+        .boat-hull {
+            fill: #8B4513;
+        }
+        .boat-mast {
+            fill: #8B4513;
+        }
+        .boat-sail {
+            fill: url(#sailGradient);
+        }
+    </style>
+</head>
+<body>
+    <div id="animation-container">
+        <svg width="100%" height="100%" viewBox="0 0 400 400">
+            <defs>
+                <linearGradient id="sailGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FF0000"/>
+                    <stop offset="50%" style="stop-color:#00FF00"/>
+                    <stop offset="100%" style="stop-color:#0000FF"/>
+                </linearGradient>
+            </defs>
+            
+            <!-- Sun -->
+            <circle class="sun" cx="50" cy="50" r="30" />
+            
+            <!-- Clouds -->
+            <path class="cloud" d="M120 80 Q140 60 160 80 T200 80 T240 80 Q260 60 280 80 Q300 100 260 100 H140 Q100 100 120 80 Z" />
+            <path class="cloud" d="M280 40 Q300 20 320 40 T360 40 Q380 60 340 60 H300 Q260 60 280 40 Z" />
+            
+            <!-- Waves -->
+            <path class="wave" d="M0 250 Q50 200 100 250 T200 250 T300 250 T400 250 V400 H0 Z" />
+            <path class="wave" d="M0 300 Q50 250 100 300 T200 300 T300 300 T400 300 V400 H0 Z" />
+            
+            <!-- Boat -->
+            <path class="boat-hull" d="M150 250 L200 300 L250 250 Z" />
+            <rect class="boat-mast" x="198" y="180" width="4" height="70" />
+            <path class="boat-sail" d="M200 180 Q230 200 220 250 H200 Z" />
+        </svg>
+    </div>
+
+    <script>
+        anime({
+            targets: '.wave',
+            translateY: [-5, 5],
+            duration: 2000,
+            loop: true,
+            direction: 'alternate',
+            easing: 'easeInOutSine'
+        });
+
+        anime({
+            targets: '.boat-hull, .boat-mast, .boat-sail',
+            translateX: [0, 100],
+            translateY: [0, -10],
+            duration: 6000,
+            loop: true,
+            easing: 'linear'
+        });
+
+        anime({
+            targets: '.boat-sail',
+            d: [
+                { value: 'M200 180 Q230 200 220 250 H200 Z' },
+                { value: 'M200 180 Q240 210 230 250 H200 Z' }
+            ],
+            duration: 2000,
+            loop: true,
+            direction: 'alternate',
+            easing: 'easeInOutSine'
+        });
+
+        anime({
+            targets: '.sun',
+            translateY: [-5, 5],
+            duration: 3000,
+            loop: true,
+            direction: 'alternate',
+            easing: 'easeInOutSine'
+        });
+
+        anime({
+            targets: '.cloud',
+            translateX: [0, 20],
+            duration: 4000,
+            loop: true,
+            direction: 'alternate',
+            easing: 'linear'
+        });
+    </script>
+</body>
+</html>
+
+[A cat] {SVG path for cat body: "M300 280 Q310 260 320 280 L340 280 Q350 260 360 280 L370 280 Q380 270 380 280 L380 300 L300 300 Z", fill: #FFA500, class: "cat"} with [spots] {two circles with class "cat-spots" at (320,290) and (350,285) with radii 5 and 7, fill: #8B4513} and [bright eyes] {two white circles with class "cat-eye" at (310,275) and (330,275) with radius 5, and black pupils with class "cat-pupil" at same coordinates with radius 2} is [walking] {animation: translateX from -50 to 50, duration: 4000ms, easing: 'easeInOutSine', looping} near [a butterfly] {SVG path with class "butterfly": "M200 150 Q220 130 240 150 Q220 170 200 150 M200 150 Q180 130 160 150 Q180 170 200 150", fill: #FFFF00} [fluttering] {animation: translateY from -20 to 20, rotate from -10 to 10 degrees, duration: 2000ms, easing: 'easeInOutQuad', looping} above [the grass] {rectangle with class "grass" at (0,300) with width 400 and height 100, fill: #4CAF50} in [the yard] {implied by the presence of grass and house} of [a colorful house] {SVG path with class "house": "M50 200 L150 100 L250 200 L250 300 L50 300 Z", fill: #FF69B4, animation: scale from 1 to 1.02 over 2000ms, easing: 'easeInOutQuad', alternating direction, looping} with [large windows] {two rectangles with class "window" at (80,220) and (180,220), each 40x40, fill: #ADD8E6} against [a blue sky] {background-color: #87CEEB set on the body} .
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat and Butterfly Animation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #87CEEB;
+        }
+        #animation-container {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        .grass { fill: #4CAF50; }
+        .house { fill: #FF69B4; }
+        .window { fill: #ADD8E6; }
+        .cat { fill: #FFA500; }
+        .cat-spots { fill: #8B4513; }
+        .cat-eye { fill: #FFFFFF; }
+        .cat-pupil { fill: #000000; }
+        .butterfly { fill: #FFFF00; }
+    </style>
+</head>
+<body>
+    <div id="animation-container">
+        <svg width="100%" height="100%" viewBox="0 0 400 400">
+            <rect class="grass" x="0" y="300" width="400" height="100" />
+            <path class="house" d="M50 200 L150 100 L250 200 L250 300 L50 300 Z" />
+            <rect class="window" x="80" y="220" width="40" height="40" />
+            <rect class="window" x="180" y="220" width="40" height="40" />
+            <g class="cat-group">
+                <path class="cat" d="M300 280 Q310 260 320 280 L340 280 Q350 260 360 280 L370 280 Q380 270 380 280 L380 300 L300 300 Z" />
+                <circle class="cat-spots" cx="320" cy="290" r="5" />
+                <circle class="cat-spots" cx="350" cy="285" r="7" />
+                <circle class="cat-eye" cx="310" cy="275" r="5" />
+                <circle class="cat-eye" cx="330" cy="275" r="5" />
+                <circle class="cat-pupil" cx="310" cy="275" r="2" />
+                <circle class="cat-pupil" cx="330" cy="275" r="2" />
+            </g>
+            <path class="butterfly" d="M200 150 Q220 130 240 150 Q220 170 200 150 M200 150 Q180 130 160 150 Q180 170 200 150" />
+        </svg>
+    </div>
+
+    <script>
+        anime({
+            targets: '.cat-group',
+            translateX: [-50, 50],
+            duration: 4000,
+            easing: 'easeInOutSine',
+            loop: true
+        });
+
+        anime({
+            targets: '.butterfly',
+            translateY: [-20, 20],
+            rotate: [-10, 10],
+            duration: 2000,
+            easing: 'easeInOutQuad',
+            loop: true
+        });
+
+        anime({
+            targets: '.house',
+            scale: [1, 1.02],
+            duration: 2000,
+            easing: 'easeInOutQuad',
+            direction: 'alternate',
+            loop: true
+        });
+    </script>
+</body>
+</html>
+
+[Car] {red rectangle with rounded corners (rx="5"), 60x30 pixels, positioned at (-60, 320) initially, with two static black circular wheels (radius 10) at (-50, 350) and (-10, 350)} [driving] {translateX animation from -60 to 460 over 4000ms, linear easing, looping indefinitely} on a [road] {gray rectangle (fill: #555) at the bottom of the scene, 400x100 pixels} in a [city] {background color #87CEEB, 400x400 pixels SVG viewBox} with [buildings] {four rectangular buildings: (20,50,80,250), (120,100,100,200), (240,150,70,150), (330,80,90,220), colored #808080} and [windows] {multiple rectangles within buildings, colored #ADD8E6, fading between opacity 0.5 and 1 over 2000ms, easeInOutQuad easing, looping alternately} . The scene is contained within an [animation container] {400x400 pixels div with overflow hidden} .
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Driving in a City</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #87CEEB;
+        }
+        #animation-container {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        .road {
+            fill: #555;
+        }
+        .building {
+            fill: #808080;
+        }
+        .window {
+            fill: #ADD8E6;
+        }
+        .car-body {
+            fill: #FF0000;
+        }
+        .car-wheel {
+            fill: #000;
+        }
+    </style>
+</head>
+<body>
+    <div id="animation-container">
+        <svg width="100%" height="100%" viewBox="0 0 400 400">
+            <rect class="road" x="0" y="300" width="400" height="100" />
+            
+            <rect class="building" x="20" y="50" width="80" height="250" />
+            <rect class="window" x="30" y="70" width="20" height="30" />
+            <rect class="window" x="70" y="70" width="20" height="30" />
+            <rect class="window" x="30" y="120" width="20" height="30" />
+            <rect class="window" x="70" y="120" width="20" height="30" />
+            
+            <rect class="building" x="120" y="100" width="100" height="200" />
+            <rect class="window" x="135" y="120" width="25" height="35" />
+            <rect class="window" x="180" y="120" width="25" height="35" />
+            <rect class="window" x="135" y="180" width="25" height="35" />
+            <rect class="window" x="180" y="180" width="25" height="35" />
+            
+            <rect class="building" x="240" y="150" width="70" height="150" />
+            <rect class="window" x="250" y="170" width="20" height="30" />
+            <rect class="window" x="280" y="170" width="20" height="30" />
+            <rect class="window" x="250" y="220" width="20" height="30" />
+            <rect class="window" x="280" y="220" width="20" height="30" />
+            
+            <rect class="building" x="330" y="80" width="90" height="220" />
+            <rect class="window" x="345" y="100" width="25" height="35" />
+            <rect class="window" x="380" y="100" width="25" height="35" />
+            <rect class="window" x="345" y="160" width="25" height="35" />
+            <rect class="window" x="380" y="160" width="25" height="35" />
+            
+            <g id="car">
+                <rect class="car-body" x="-60" y="320" width="60" height="30" rx="5" />
+                <circle class="car-wheel" cx="-50" cy="350" r="10" />
+                <circle class="car-wheel" cx="-10" cy="350" r="10" />
+            </g>
+        </svg>
+    </div>
+
+    <script>
+        anime({
+            targets: '#car',
+            translateX: 460,
+            duration: 4000,
+            easing: 'linear',
+            loop: true
+        });
+
+        anime({
+            targets: '.window',
+            opacity: [0.5, 1],
+            duration: 2000,
+            easing: 'easeInOutQuad',
+            loop: true,
+            direction: 'alternate'
+        });
+    </script>
+</body>
+</html>
+
+
+car
+'a car'
+draw(car)
+
+longcar = car.property('A', 'B')
+
+"'a car', make it have property 'A, B'"
+
+
+class generate 
+
+object -> create prompt
+
+draw object -> creare svg and put it on canvas
+
+object.property -> add feature to prompt
+
+object.color -> add color to prompt
+
+animate (object) -> add animation feature to object
+
+object = object.loadsvg() -> load existing svg
+

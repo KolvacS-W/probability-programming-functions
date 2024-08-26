@@ -1,0 +1,9 @@
+
+Based on the following code and description, provide an updated description. Code: HTML: \`\`\`html${newCode.html}\`\`\` CSS: \`\`\`css${newCode.css}\`\`\` JS: \`\`\`js${newCode.js}\`\`\` Description: ${existingDescription}. The new description should be same old description + added details to specific parts of the old description (for example, add number of planets and each planet's dom element type, class, style features and name to entity 'planet') according to the code, and all the added details should be within {}, and put the correspounding entity the details are describing in []. Put each added detail behind the specific words that directly related to the detail. Include nothing but the new description in the response.
+
+
+A [ball] {one blue circular div element with a class name of 'ball', width, and height set to 20px, positioned absolutely, and with a background color of #3298dc} moving along a different curve {a quadratic Bezier curve specified in SVG with the path 'M10 80 Q 95 10 180 80'} using Anime.js animation for looping {loop set to true} with alternate directions {direction set to 'alternate'} and linear easing {easing set to 'linear'}.
+
+
+this is a [test]{hhhhhh}, and  [tests]{hsshhhhh}
+
