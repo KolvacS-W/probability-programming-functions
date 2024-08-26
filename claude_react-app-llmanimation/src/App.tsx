@@ -20,28 +20,72 @@ const App: React.FC = () => {
       id: 'init',
       description: "set 'code2desc = true' in whole_canvas.draw() parameter to generate descriptions",
       savedOldDescription: '', 
-      backendcode: {html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVG Example</title>
-    <style>
-        body {
-            margin: 0;
-            background-color: skyblue;
-            width: 600px;
-            height: 600px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-    </style>
-</head>
-<body>
-</body>
-</html>`},
+      backendcode: {html: `              <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  <title>Fabric.js Library Example</title>
+              </head>
+              <style>
+                  html, body {
+                    margin: 0;
+                    padding: 0;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    overflow: hidden;
+                  }
+                  #canvasContainer {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                  }
+                </style>
+              <body>
+                  <div id="canvasContainer"></div>
+                  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.js"></script>
+                  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/addons/p5.sound.min.js"></script>
+                  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+                  <script>
+                  document.addEventListener('click', function(event) {
+                      const rect = document.body.getBoundingClientRect();
+                      const x = ((event.clientX - rect.left) / rect.width) * 100;
+                      const y = ((event.clientY - rect.top) / rect.height) * 100;
+                      window.parent.postMessage({ type: 'CLICK_COORDINATES', x: x, y: y }, '*');
+                  });
+                  </script>
+                  <script>
+                  function setup() {
+                      // Get the canvas container element
+                      let canvasContainer = document.getElementById('canvasContainer');
+                                        
+                      // Create the canvas with the same dimensions as the container
+                      let canvas = createCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+                      
+                      // Place the canvas inside the container
+                      canvas.parent('canvasContainer');
+                      
+                      // Ensure the canvas resizes dynamically with the container
+                      window.addEventListener('resize', () => {
+                          resizeCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+                          background('skyblue');  // Optional: Reapply the background to prevent any artifacts
+                      });
+                    }
+
+                  function draw() {
+                    // Resize the canvas to fill the container before drawing
+                      // window.addEventListener('resize', () => {
+                      //     resizeCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+                      //     background('skyblue');  // Optional: Reapply the background to prevent any artifacts
+                      // });
+                    //add code to draw()....
+                  }
+                  </script>
+                  </body>
+                  </html>`},
       usercode: { js: `
 // Example of how sketch.js might look
 const myGenerate = new Generate('strokes');
@@ -49,9 +93,9 @@ myGenerate.detail('growing tree stroke depicting root system.');
 const name = await myGenerate.generateAndApply()
 console.log('name', name)
 
-// const myGenerate2 = await new Generate('random shape');
+// const myGenerate2 = new Generate('random shape');
 // myGenerate2.detail('malleable silhouettes evolving between radiant shades');
-
+// myGenerate2.prevcode = name
 // myGenerate2.generateAndApply()` },
       savedOldCode: { html: '', css: '', js: '' },
       keywordTree: [
@@ -442,15 +486,31 @@ console.log('name', name)
 
   const handleUpdateBackendHtml = (newHtml: string) => {
     if (currentVersionId === null) return;
+  
     setVersions((prevVersions) => {
-      const updatedVersions = prevVersions.map(version =>
-        version.id === currentVersionId
-          ? { ...version, backendcode: { ...version.backendcode, html: newHtml } }
-          : version
-      );
+      const updatedVersions = prevVersions.map((version) => {
+        if (version.id === currentVersionId) {
+          // Get the current HTML content
+          const currentHtml = version.backendcode.html;
+  
+          // Replace the placeholder with the new content
+          const updatedHtml = currentHtml.replace(
+            '//add code to draw()....',
+            newHtml + '//add code to draw()....'
+          );
+  
+          // Return the updated version object
+          return { ...version, backendcode: { ...version.backendcode, html: updatedHtml } };
+        }
+  
+        // Return the version unchanged if it doesn't match the current version ID
+        return version;
+      });
+  
       return updatedVersions;
     });
   };
+  
   
 
 

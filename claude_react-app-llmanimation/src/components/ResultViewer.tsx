@@ -22,6 +22,7 @@ const ngrok_url = 'https://c2fb-34-125-1-65.ngrok-free.app';
 const ngrok_url_sonnet = ngrok_url + '/api/message';
 //for future use in draw()
 
+
 const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, activeTab, updateBackendHtml, currentVersionId, setVersions, versions, }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -274,16 +275,18 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
                       canvas.parent('canvasContainer');
                       
                       // Ensure the canvas resizes dynamically with the container
-                      // window.addEventListener('resize', () => {
-                      //     resizeCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
-                      //     background('skyblue');  // Optional: Reapply the background to prevent any artifacts
-                      // });
+                      window.addEventListener('resize', () => {
+                          resizeCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+                          background('skyblue');  // Optional: Reapply the background to prevent any artifacts
+                      });
                     }
 
                   function draw() {
                     // Resize the canvas to fill the container before drawing
-                    const canvasContainer = document.getElementById('canvasContainer');
-                    resizeCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+                      // window.addEventListener('resize', () => {
+                      //     resizeCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+                      //     background('skyblue');  // Optional: Reapply the background to prevent any artifacts
+                      // });
 
                   }
                   </script>
@@ -321,7 +324,7 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
               console.log('check codelist in prev', codelist)
               const existingcode = codelist.find((item) => item.codeName === codename)?.codeText;
               console.log('draw with prev code:', existingcode)
-              const APIprompt = \`fill in the draw() function for p5.js code snippet: 
+              APIprompt = \`fill in the draw() function for p5.js code snippet: 
               function setup() {
                 // Get the canvas container element
                 let canvasContainer = document.getElementById('canvasContainer');
@@ -335,7 +338,7 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
               function draw() {\`
               +existingcode+
               \`}
-          to add a\` + this.basic_prompt+ \`, with these details: \` + this.detail_prompt +\` on canvas. Make sure to include no text other than code inside draw() function in the response. Also donot include "draw() {} in response, just the code inside. Make sure the background color for the code you added are all transparent.\`;
+          to add a\` + this.basic_prompt+ \`, with these details: \` + this.detail_prompt +\` on canvas. Make sure the generated code is visible on the canvas and will be compatible with existing code in draw() and the contents of both existing and new generated code will be shown correctly without infecting each other. Make sure to include no text other than code inside draw() function in the response. Return new code without including existing code. Also donot include "draw() {} in response, just the code inside. Make there is no background color.\`;
           }
 
       else {
@@ -390,8 +393,9 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
                 existingDrawFunction();
                 newDrawFunction();
             };
-
             const codename = this.basic_prompt + ' ' + this.detail_prompt;
+            this.updateHTMLString(this.generatedDrawCode, codename, false)
+            
           // Send the message to update the reusable element list
           window.parent.postMessage({ type: 'UPDATE_REUSEABLE', codename: codename, codetext: this.generatedDrawCode }, '*');
           console.log('Sent UPDATE_REUSEABLE message with codename:', codename);
@@ -408,7 +412,7 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
               };
               window.addEventListener('message', messageHandler);
           });
-            console.log('Draw function applied.', window.draw, codename);
+            console.log('Draw function applied.', window.draw.toString(), codename);
             return codename; // Return the codename
         } else {
             console.error('No generated draw code available to apply.');
@@ -420,6 +424,18 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
         const codename = await this.apply();
         return codename;
     }
+    
+
+updateHTMLString(codetext, codename, ifcode2desc) {
+    console.log('in updateHTMLString', ifcode2desc);
+
+        // Post the updated HTML back to the parent component
+        window.parent.postMessage({ type: 'UPDATE_HTML', html: codetext }, '*');
+
+        console.log("Updated HTML string with new code:", codetext);
+
+}
+
 }
 
                   // Assign the class to the global window object
