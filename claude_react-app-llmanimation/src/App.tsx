@@ -46,7 +46,7 @@ const App: React.FC = () => {
 // Example of how sketch.js might look
 const myGenerate = new Generate('strokes');
 myGenerate.detail('growing tree stroke depicting root system.');
-name = await myGenerate.generateAndApply()
+const name = await myGenerate.generateAndApply()
 console.log('name', name)
 
 // const myGenerate2 = await new Generate('random shape');

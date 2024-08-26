@@ -297,7 +297,15 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
         this.generatedSetupCode = '';
         this.generatedDrawCode = '';
         this.refcode = '';
+        this.prevcode = '';
         console.log('Object created:', name);
+    }
+    
+    refcode(codename){
+    }
+
+    prevcode(codename){
+      this.prevcode = codename
     }
 
     detail(detail) {
@@ -306,24 +314,47 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
     }
 
     async generateCode() {
-        const APIprompt = \`fill in the draw() function for p5.js code snippet: 
-    function setup() {
-        // Get the canvas container element
-        let canvasContainer = document.getElementById('canvasContainer');
-        
-        // Create the canvas with the same dimensions as the container
-        let canvas = createCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
-        
-        // Place the canvas inside the container
-        canvas.parent('canvasContainer');
+      var APIprompt = ''
+      if(this.prevcode){
+              const codename = this.prevcode
+              const codelist = window.currentreuseableElementList
+              console.log('check codelist in prev', codelist)
+              const existingcode = codelist.find((item) => item.codeName === codename)?.codeText;
+              console.log('draw with prev code:', existingcode)
+              const APIprompt = \`fill in the draw() function for p5.js code snippet: 
+              function setup() {
+                // Get the canvas container element
+                let canvasContainer = document.getElementById('canvasContainer');
+                
+                // Create the canvas with the same dimensions as the container
+                let canvas = createCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+                
+                // Place the canvas inside the container
+                canvas.parent('canvasContainer');                
+              }
+              function draw() {\`
+              +existingcode+
+              \`}
+          to add a\` + this.basic_prompt+ \`, with these details: \` + this.detail_prompt +\` on canvas. Make sure to include no text other than code inside draw() function in the response. Also donot include "draw() {} in response, just the code inside. Make sure the background color for the code you added are all transparent.\`;
+          }
 
-    }
-
-    function draw() {
-
-}
-to add a\` + this.basic_prompt+ \`, with these details: \` + this.detail_prompt +\` on canvas. Make sure to include no text other than code inside draw() function in the response. Also donot include "draw() {} in response, just the code inside. Make sure the background color for the code you added are all transparent.\`;
-        console.log('API prompt:', APIprompt);
+      else {
+                  APIprompt = \`fill in the draw() function for p5.js code snippet: 
+                  function setup() {
+                      // Get the canvas container element
+                      let canvasContainer = document.getElementById('canvasContainer');
+                      
+                      // Create the canvas with the same dimensions as the container
+                      let canvas = createCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+                      
+                      // Place the canvas inside the container
+                      canvas.parent('canvasContainer');
+                  }
+                  function draw() {
+                  }
+              to add a\` + this.basic_prompt+ \`, with these details: \` + this.detail_prompt +\` on canvas. Make sure to include no text other than code inside draw() function in the response. Also donot include "draw() {} in response, just the code inside. Make sure the background color for the code you added are all transparent.\`;                    
+      }
+       console.log('API prompt:', APIprompt);
 
           try {
             const response = await axios.post(this.ngrok_url_sonnet, {
@@ -377,19 +408,16 @@ to add a\` + this.basic_prompt+ \`, with these details: \` + this.detail_prompt 
               };
               window.addEventListener('message', messageHandler);
           });
+            console.log('Draw function applied.', window.draw, codename);
             return codename; // Return the codename
-
-            console.log('Draw function applied.', window.draw);
         } else {
             console.error('No generated draw code available to apply.');
         }
     }
 
     async generateAndApply() {
-        const codename = await this.generateCode();
-        console.log('yes 1')
-        await this.apply();
-        console.log('yes 2')
+        await this.generateCode();
+        const codename = await this.apply();
         return codename;
     }
 }
@@ -398,7 +426,10 @@ to add a\` + this.basic_prompt+ \`, with these details: \` + this.detail_prompt 
                       window.Generate = Generate;
                   }
                     (function() {
-                      ${usercode.js}
+                      // Automatically wrap the user code in an async function
+                      (async function() {
+                        ${usercode.js}
+                      })();
                     })();
                   </script>
               </body>
