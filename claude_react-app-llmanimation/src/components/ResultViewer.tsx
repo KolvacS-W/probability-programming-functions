@@ -18,7 +18,7 @@ interface ResultViewerProps {
 
 }
 
-const ngrok_url = 'https://c2fb-34-125-1-65.ngrok-free.app';
+const ngrok_url = 'https://d559-34-150-214-126.ngrok-free.app';
 const ngrok_url_sonnet = ngrok_url + '/api/message';
 //for future use in draw()
 
@@ -277,16 +277,15 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
                       // Ensure the canvas resizes dynamically with the container
                       window.addEventListener('resize', () => {
                           resizeCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
-                          background('skyblue');  // Optional: Reapply the background to prevent any artifacts
+                          //background('skyblue');  // Optional: Reapply the background to prevent any artifacts
                       });
+                      console.log('setup executed')
+
                     }
 
                   function draw() {
-                    // Resize the canvas to fill the container before drawing
-                      // window.addEventListener('resize', () => {
-                      //     resizeCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
-                      //     background('skyblue');  // Optional: Reapply the background to prevent any artifacts
-                      // });
+                      console.log('draw executed')
+                      // console.log('check width and height', width, height)
 
                   }
                   </script>
@@ -326,19 +325,26 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
               console.log('draw with prev code:', existingcode)
               APIprompt = \`fill in the draw() function for p5.js code snippet: 
               function setup() {
-                // Get the canvas container element
-                let canvasContainer = document.getElementById('canvasContainer');
-                
-                // Create the canvas with the same dimensions as the container
-                let canvas = createCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
-                
-                // Place the canvas inside the container
-                canvas.parent('canvasContainer');                
-              }
-              function draw() {\`
+                  // Get the canvas container element
+                  let canvasContainer = document.getElementById('canvasContainer');
+                                    
+                  // Create the canvas with the same dimensions as the container
+                  let canvas = createCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+                  
+                  // Place the canvas inside the container
+                  canvas.parent('canvasContainer');
+                  
+                  // Ensure the canvas resizes dynamically with the container
+                  window.addEventListener('resize', () => {
+                      resizeCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+                      //background('skyblue');  // Optional: Reapply the background to prevent any artifacts
+                  });
+                }
+              function draw() {
+              // console.log('check canvas width and height', width, height)\`
               +existingcode+
               \`}
-          to add a\` + this.basic_prompt+ \`, with these details: \` + this.detail_prompt +\` on canvas. Make sure the generated code is visible on the canvas and will be compatible with existing code in draw() and the contents of both existing and new generated code will be shown correctly without infecting each other. Make sure to include no text other than code inside draw() function in the response. Return new code without including existing code. Also donot include "draw() {} in response, just the code inside. Make there is no background color.\`;
+          to add a\` + this.basic_prompt+ \`, with these details: \` + this.detail_prompt +\` on canvas. Make sure the generated code is visible on the canvas and will be compatible with existing code in draw() and the contents of both existing and new generated code will be shown correctly without infecting each other. Donot overwrite any existing variables in draw(). Make sure to include no text other than code inside draw() function in the response. Use width and height parameter of canvas to decide the position and size of contents relatively. Return new code without including existing code. Also donot include "draw() {} in response, just the code inside. Make there is no background color.\`;
           }
 
       else {
@@ -346,16 +352,24 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
                   function setup() {
                       // Get the canvas container element
                       let canvasContainer = document.getElementById('canvasContainer');
-                      
+                                        
                       // Create the canvas with the same dimensions as the container
                       let canvas = createCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
                       
                       // Place the canvas inside the container
                       canvas.parent('canvasContainer');
-                  }
+                      
+                      // Ensure the canvas resizes dynamically with the container
+                      window.addEventListener('resize', () => {
+                          resizeCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+                          //background('skyblue');  // Optional: Reapply the background to prevent any artifacts
+                      });
+                    }
+
                   function draw() {
+                      // console.log('check canvas width and height', width, height)
                   }
-              to add a\` + this.basic_prompt+ \`, with these details: \` + this.detail_prompt +\` on canvas. Make sure to include no text other than code inside draw() function in the response. Also donot include "draw() {} in response, just the code inside. Make sure the background color for the code you added are all transparent.\`;                    
+              to add a\` + this.basic_prompt+ \`, with these details: \` + this.detail_prompt +\` on canvas. Use width and height parameter of canvas to decide the position and size of contents relatively. Make sure to include no text other than code inside draw() function in the response. Also donot include "draw() {} in response, just the code inside. Make sure the background color for the code you added are all transparent.\`;                    
       }
        console.log('API prompt:', APIprompt);
 
@@ -413,6 +427,15 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
               window.addEventListener('message', messageHandler);
           });
             console.log('Draw function applied.', window.draw.toString(), codename);
+            
+            // Implicitly force evaluation and execution of setup and draw
+            if (typeof window.setup === 'function') {
+                window.setup(); // Ensure setup is called after applying the new draw function
+            }
+            if (typeof window.draw === 'function') {
+                window.draw(); // Ensure draw is executed after applying the new draw function
+            }
+                        
             return codename; // Return the codename
         } else {
             console.error('No generated draw code available to apply.');
@@ -461,7 +484,7 @@ updateHTMLString(codetext, codename, ifcode2desc) {
     return () => {
       window.removeEventListener('message', handleIframeMessage);
     };
-  }, [usercode]);
+  }, [usercode, versions.find(version => version.id === currentVersionId)?.runTrigger]);
 
   return (
     <div ref={containerRef} className="result-viewer" >

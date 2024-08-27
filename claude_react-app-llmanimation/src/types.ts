@@ -36,6 +36,7 @@ export interface KeywordNode {
     detailtargetext?: string[],
     reuseableElementList: { codeName: string, codeText: string, selected: boolean }[];
     storedcoordinate?: { x: number, y: number };
+    runTrigger: number; // Add this property to act as a trigger for useEffect;
   }
   
   

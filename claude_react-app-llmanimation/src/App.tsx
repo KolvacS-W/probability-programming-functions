@@ -50,14 +50,6 @@ const App: React.FC = () => {
                   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/addons/p5.sound.min.js"></script>
                   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
                   <script>
-                  document.addEventListener('click', function(event) {
-                      const rect = document.body.getBoundingClientRect();
-                      const x = ((event.clientX - rect.left) / rect.width) * 100;
-                      const y = ((event.clientY - rect.top) / rect.height) * 100;
-                      window.parent.postMessage({ type: 'CLICK_COORDINATES', x: x, y: y }, '*');
-                  });
-                  </script>
-                  <script>
                   function setup() {
                       // Get the canvas container element
                       let canvasContainer = document.getElementById('canvasContainer');
@@ -71,32 +63,28 @@ const App: React.FC = () => {
                       // Ensure the canvas resizes dynamically with the container
                       window.addEventListener('resize', () => {
                           resizeCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
-                          background('skyblue');  // Optional: Reapply the background to prevent any artifacts
+                          //background('skyblue');  // Optional: Reapply the background to prevent any artifacts
                       });
                     }
 
                   function draw() {
-                    // Resize the canvas to fill the container before drawing
-                      // window.addEventListener('resize', () => {
-                      //     resizeCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
-                      //     background('skyblue');  // Optional: Reapply the background to prevent any artifacts
-                      // });
+                      // console.log('check canvas width and height', width, height)
                     //add code to draw()....
                   }
                   </script>
                   </body>
                   </html>`},
       usercode: { js: `
-// Example of how sketch.js might look
-const myGenerate = new Generate('strokes');
-myGenerate.detail('growing tree stroke depicting root system.');
+//Example of how sketch.js might look
+const myGenerate = new Generate('shape');
+myGenerate.detail('colorful shrinking and expanding polygon on center and 4 corners of canvas.');
 const name = await myGenerate.generateAndApply()
-console.log('name', name)
+//console.log('name', name)
 
-// const myGenerate2 = new Generate('random shape');
-// myGenerate2.detail('malleable silhouettes evolving between radiant shades');
-// myGenerate2.prevcode = name
-// myGenerate2.generateAndApply()` },
+const myGenerate2 = new Generate('wave');
+myGenerate2.detail('Sound waves propagating through the polygons');
+myGenerate2.prevcode = name
+myGenerate2.generateAndApply()` },
       savedOldCode: { html: '', css: '', js: '' },
       keywordTree: [
         { level: 1, keywords: [] },
@@ -114,6 +102,7 @@ console.log('name', name)
       specificParamList: [], // Added
       paramCheckEnabled: false, // Added
       reuseableElementList: [], // Added
+      runTrigger: 0
     };
   
     setVersions([baseVersion]);
@@ -256,18 +245,22 @@ console.log('name', name)
     });
   };
   //run userjs
-  const handlejsCodeInitialize = (newuserCode: { js: string }, initialbackendCode: { html: string }) => {
-    // console.log('check code in handleCodeInitialize', newCode.html)
-    if (currentVersionId === null) return;
-    setVersions((prevVersions) => {
-      const updatedVersions = prevVersions.map(version =>
-        version.id === currentVersionId
-          ? { ...version, usercode: newuserCode}
-          : version
-      );
-      return updatedVersions;
-    });
-  };
+const handlejsCodeInitialize = (newuserCode: { js: string }, initialbackendCode: { html: string }) => {
+  if (currentVersionId === null) return;
+  setVersions((prevVersions) => {
+    const updatedVersions = prevVersions.map(version =>
+      version.id === currentVersionId
+        ? { 
+            ...version, 
+            usercode: newuserCode,
+            runTrigger: version.runTrigger + 1 // Increment the runTrigger to force useEffect to run
+          }
+        : version
+    );
+    return updatedVersions;
+  });
+};
+
   //run backendhtml
   const handlehtmlCodeInitialize = (newuserCode: { js: string }) => {
     // console.log('check code in handleCodeInitialize', newCode.html)
