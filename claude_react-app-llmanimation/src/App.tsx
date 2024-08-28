@@ -76,15 +76,18 @@ const App: React.FC = () => {
                   </html>`},
       usercode: { js: `
 //Example of how sketch.js might look
+//Example of how sketch.js might look
 const myGenerate = new Generate('shape');
-myGenerate.detail('colorful shrinking and expanding polygon on center and 4 corners of canvas.');
-const name = await myGenerate.generateAndApply()
-//console.log('name', name)
+myGenerate.detail('red moving polygon center of canvas.');
+await myGenerate.generateAndApply()
 
-const myGenerate2 = new Generate('wave');
-myGenerate2.detail('Sound waves propagating through the polygons');
-myGenerate2.prevcode = name
-myGenerate2.generateAndApply()` },
+const myGenerate2 = new Generate('shape2');
+myGenerate2.detail('green moving polygon coming out of the vertexes of the red polygon');
+await myGenerate2.generateAndApply(true)
+
+const myGenerate3 = new Generate('shape3');
+myGenerate3.detail('blue moving polygon coming out of the vertexes of the green polygons');
+myGenerate3.generateAndApply(true)` },
       savedOldCode: { html: '', css: '', js: '' },
       keywordTree: [
         { level: 1, keywords: [] },

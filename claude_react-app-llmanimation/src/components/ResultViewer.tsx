@@ -18,7 +18,7 @@ interface ResultViewerProps {
 
 }
 
-const ngrok_url = 'https://d559-34-150-214-126.ngrok-free.app';
+const ngrok_url = 'https://6a93-35-237-28-246.ngrok-free.app';
 const ngrok_url_sonnet = ngrok_url + '/api/message';
 //for future use in draw()
 
@@ -284,10 +284,12 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
                     }
 
                   function draw() {
-                      console.log('draw executed')
+                      window.previousdrawcode = \`
+                      background('grey')
+                      // console.log('draw executed')
                       // console.log('check width and height', width, height)
-
-                  }
+                      //add code to draw()....\`
+                      }
                   </script>
                   <script>
                   if (!window.Generate) {
@@ -315,14 +317,14 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
         console.log('Detail added:', detail);
     }
 
-    async generateCode() {
+    async generateCode(ifprevcontext) {
       var APIprompt = ''
-      if(this.prevcode){
-              const codename = this.prevcode
-              const codelist = window.currentreuseableElementList
-              console.log('check codelist in prev', codelist)
-              const existingcode = codelist.find((item) => item.codeName === codename)?.codeText;
-              console.log('draw with prev code:', existingcode)
+      if(ifprevcontext){
+              // const codename = this.prevcode
+              // const codelist = window.currentreuseableElementList
+              // console.log('check codelist in prev', codelist)
+              // const existingcode = codelist.find((item) => item.codeName === codename)?.codeText;
+              // console.log('draw with prev code:', existingcode)
               APIprompt = \`fill in the draw() function for p5.js code snippet: 
               function setup() {
                   // Get the canvas container element
@@ -342,9 +344,9 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
                 }
               function draw() {
               // console.log('check canvas width and height', width, height)\`
-              +existingcode+
+              +window.previousdrawcode+
               \`}
-          to add a\` + this.basic_prompt+ \`, with these details: \` + this.detail_prompt +\` on canvas. Make sure the generated code is visible on the canvas and will be compatible with existing code in draw() and the contents of both existing and new generated code will be shown correctly without infecting each other. Donot overwrite any existing variables in draw(). Make sure to include no text other than code inside draw() function in the response. Use width and height parameter of canvas to decide the position and size of contents relatively. Return new code without including existing code. Also donot include "draw() {} in response, just the code inside. Make there is no background color.\`;
+          to add a new content: \` + this.basic_prompt+ \`, with this relationship to the existing code: \` + this.detail_prompt +\` on canvas. Donot re-write or overwrite any existing variables in draw(). Make sure to include no text other than code inside draw() function in the response. Use width and height parameter of canvas to decide the position and size of contents relatively. Return new code without including existing code. Also donot include "draw() {} in response, just the code inside. Make there is no background color.\`;
           }
 
       else {
@@ -394,56 +396,66 @@ const ResultViewer: React.FC<ResultViewerProps> = ({ usercode, backendcode, acti
         }
     }
 
-    async apply() {
-        if (this.generatedDrawCode) {
-            // Preserve the existing draw function
-            const existingDrawFunction = window.draw || function() {};
+async apply() {
+    if (this.generatedDrawCode) {
+        //get previous code in draw()
+        var previousdrawcode = window.previousdrawcode
 
-            // Create a new function from the generated draw code
-            const newDrawFunction = new Function(this.generatedDrawCode);
+        console.log('previousdrawcode',  previousdrawcode)
+        // Extract the body of the existing draw function
 
-            // Define the combined draw function
-            window.draw = function() {
-                existingDrawFunction();
-                newDrawFunction();
-            };
-            const codename = this.basic_prompt + ' ' + this.detail_prompt;
-            this.updateHTMLString(this.generatedDrawCode, codename, false)
-            
-          // Send the message to update the reusable element list
-          window.parent.postMessage({ type: 'UPDATE_REUSEABLE', codename: codename, codetext: this.generatedDrawCode }, '*');
-          console.log('Sent UPDATE_REUSEABLE message with codename:', codename);
+        // Append the new generated code to the existing draw function body
+        const combinedDrawCode = previousdrawcode.replace('//add code to draw()....', this.generatedDrawCode + '//add code to draw()....') ;
+        
+        console.log('combineddrawcode', combinedDrawCode)
 
-          // Wait for the confirmation after sending the message
-          await new Promise((resolve) => {
-              const messageHandler = (event) => {
-                  if (event.data.type === 'UPDATE_REUSEABLE_CONFIRMED' && event.data.codename === codename) {
-                      window.currentreuseableElementList = event.data.reuseableElementList;
-                      console.log('Received UPDATE_REUSEABLE_CONFIRMED for codename:', window.currentreuseableElementList);
-                      window.removeEventListener('message', messageHandler);
-                      resolve(); // Resolve the promise to continue execution
-                  }
-              };
-              window.addEventListener('message', messageHandler);
-          });
-            console.log('Draw function applied.', window.draw.toString(), codename);
-            
-            // Implicitly force evaluation and execution of setup and draw
-            if (typeof window.setup === 'function') {
-                window.setup(); // Ensure setup is called after applying the new draw function
-            }
-            if (typeof window.draw === 'function') {
-                window.draw(); // Ensure draw is executed after applying the new draw function
-            }
-                        
-            return codename; // Return the codename
-        } else {
-            console.error('No generated draw code available to apply.');
+        //update the previous draw code
+        window.previousdrawcode = combinedDrawCode
+        
+        //make the draw() execute updated code
+        window.draw = function draw(){
+          eval(combinedDrawCode)
         }
-    }
 
-    async generateAndApply() {
-        await this.generateCode();
+        const codename = this.basic_prompt + ' ' + this.detail_prompt;
+        this.updateHTMLString(this.generatedDrawCode, codename, false);
+        
+        // Send the message to update the reusable element list
+        window.parent.postMessage({ type: 'UPDATE_REUSEABLE', codename: codename, codetext: this.generatedDrawCode }, '*');
+        console.log('Sent UPDATE_REUSEABLE message with codename:', codename);
+        
+        // Wait for the confirmation after sending the message
+        await new Promise((resolve) => {
+            const messageHandler = (event) => {
+                if (event.data.type === 'UPDATE_REUSEABLE_CONFIRMED' && event.data.codename === codename) {
+                    window.currentreuseableElementList = event.data.reuseableElementList;
+                    console.log('Received UPDATE_REUSEABLE_CONFIRMED for codename:', window.currentreuseableElementList);
+                    window.removeEventListener('message', messageHandler);
+                    resolve(); // Resolve the promise to continue execution
+                }
+            };
+            window.addEventListener('message', messageHandler);
+        });
+        
+        // Implicitly force evaluation and execution of setup and draw
+        if (typeof window.setup === 'function') {
+            window.setup(); // Ensure setup is called after applying the new draw function
+        }
+        if (typeof window.draw === 'function') {
+            window.draw(); // Ensure draw is executed after applying the new draw function
+        }
+        
+        console.log(codename + ' runs: ', window.draw.toString());
+        
+        return codename; // Return the codename
+    } else {
+        console.error('No generated draw code available to apply.');
+    }
+}
+
+
+    async generateAndApply(ifprevcontext = false) {
+        await this.generateCode(ifprevcontext);
         const codename = await this.apply();
         return codename;
     }
